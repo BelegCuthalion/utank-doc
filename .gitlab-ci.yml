@@ -1,0 +1,7 @@
+make_docs:
+  image: beleg/xepersian
+  script:
+    - xelatex -pdf docs/*.tex
+  artifacts:
+    paths:
+      - ./*.pdf
