@@ -4,30 +4,88 @@
 \usepackage{amssymb}
 \usepackage{titlesec}
 \usepackage{fullpage}
+\usepackage{hyperref}
+\usepackage[framemethod=TikZ]{mdframed}
 \usepackage[a4paper,bindingoffset=0.2in,%
-            left=.2in,right=1.2in,top=.5in,bottom=1in,%
+            left=.8in,right=.8in,top=.5in,bottom=1in,%
             footskip=.25in]{geometry}
-\usepackage{tikz}
-\usetikzlibrary{shapes,arrows,shadows}
+\usepackage[outputdir=out]{minted}
 \usepackage{xepersian}
-\settextfont{Nazli}
- 
+\settextfont{Roya}
+\deflatinfont\dast{Far.Dast Nevis}
+\deflatinfont\en{Ubuntu}
+\deflatinfont\code{Ubuntu Mono}
+\newfontfamily\monaco{Ubuntu Mono}[NFSSFamily=Ubuntu]
+\definecolor{codebg}{rgb}{0.1,0.1, 0.15}
+\usemintedstyle{monokai}
+\setminted[java]{
+				fontfamily=Ubuntu,
+				linenos,
+				bgcolor=codebg
+			}
+\newcommand{\minti}[1]{\lr{\mintinline{java}{#1}}}
+%\newenvironment{sugg}{\begin{mdframed} {\dast پیشنهاد: }}{\end{mdframed}}
+
+\newmdenv[%
+outerlinewidth=2,%
+roundcorner=5pt,%
+leftmargin=40,%
+rightmargin=40,%
+outerlinecolor=blue!50,%
+frametitleaboveskip=-\ht\strutbox,
+frametitle= \colorbox{white}{\space{\dast پیشنهاد}\space}%
+] {sugg}
+
 \titleformat{\section}[runin]{\normalfont\bfseries}{\thesection}{0.7em}{}
 \titlespacing{\section}{.5pc}{2ex plus .1ex minus .2ex}{1pc}
+\titleformat{\subsection}[runin]{\normalfont\bfseries}{\thesubsection}{0.7em}{}
+\titlespacing{\subsection}{.5pc}{2ex plus .1ex minus .2ex}{1pc}
 
 \begin{document}
 \noindent{
-\sc{ویرایش \lr{0}} \\
+\sc{ویرایش \lr{0.1}} \\
 \large{\textbf{پروژه‌ی درسِ برنامه‌سازیِ پیشرفته} \\
- \emph{\lr{UTank}}
+ \emph{\en{UTank}}
 }
 }
 \\
 
-\section{خلاصه} 
-خلاصه، بعله دیگه.\\
-\section{ساختار}
+\section*{مقدمه}
+در این مستند، همراه با معرفیِ پروژه‌ی درس، با ابزارهای گرافیکیِ {\en Java} نیز آشنا می‌شوید. پروژه‌ی درس یک بازیِ گرافیکیِ ساده است که توسطِ دو بازیکن و با صفحه‌کلید بازی می‌شود. هدف از انجامِ پروژه، علاوه بر سنجشِ مهارتِ طراحی و پیاده‌سازیِ نرم‌افزار، تمرینِ کارِ گروهی و استفاده‌  از ابزارهای شیء‌گراییِ {\en Java} در یک مسئله‌ی دنیایِ واقعی است. بنابراین، در معیارِ نهاییِ سنجشِ پروژه، هم کارآییِ برنامه و هم کدِ آن مؤثر خواهند بود.
 
+همچنین پیشنهادهایی برای پیاده‌سازیِ پروژه داده شده است. این پیشنهادها می‌توانند مستقیماً و یا تنها به عنوانِ طرحی کلی استفاده شوند، و همچنین می‌توانند کاملاً نادیده گرفته شوند.
+
+توصیه می‌شود پیش از شروع به کار، این مستند را به دقت و تا انتها خوانده و سؤالات یا ابهام‌های احتمالی را برطرف کنید.
+
+\section{\en{Swing}}
+پیش‌تر با چگونگیِ ارتباط با کاربر از طریقِ رابطِ کاربریِ {\en command-line} آشنا شده‌ایم. حالا می‌خواهیم از محیطِ گرافیکی برای این کار استفاده کنیم. رابطِ کاربریِ گرافیکی به ما اجازه می‌دهد تا به راحتی تصویری دلخواه برای نمایش به کاربر بسازیم و همچنین ورودی‌های کاربر مانندِ صفحه‌کلید و موس را کنترل کنیم. در واقع رابطِ گرافیکی برای ما یک «پنجره» با صفحه‌ای خالی فراهم خواهد کرد که می‌توانیم روی آن «رسم» کنیم و بر اساس تعاملِ کاربر با این پنجره کارکردِ برنامه را تعیین کنیم.
+
+ابزارهایی که برای ساختِ یک محیطِ گرافیکی در {\en Java} استفاده خواهیم کرد در پکیجی به نامِ {\en Swing} در {\en JDK} حضور دارند. اولین ابزاری که معرفی خواهد شد، کلاسی به نامِ \minti{JFrame} است که هر {\en object}ِ آن، یک پنجره‌ی رابطِ گرافیکی است.
+
+\subsection{\en JFrame}
+اجرای قطعه‌کدِ زیر یک پنجره‌ی خالی به ابعادِ ۵۰۰ در ۵۰۰ پیکسل را نمایش می‌دهد.
+
+\begin{minted}{java}
+import javax.swing.*;
+
+public class Main {
+  public static void main(String[] args) {
+    JFrame jframe = new JFrame();
+    jframe.setSize(500, 500);
+    jframe.setVisible(true);
+  }
+}
+\end{minted}
+تابع‌های \minti{.setSize()} و \minti{.setVisible()} دو متد از کلاسِ {\en JFrame} هستند که به ترتیب ابعادِ پنجره را مقدار دهی کرده و آن را نمایش می‌دهند. متدهای دیگری از {\en JFrame} نیز در بخش‌های بعدی معرفی خواهند شد.
+
+\begin{sugg}
+  در واقع \minti{JFrame} یکی از راه‌های ساختِ پنجره در {\en Swing} است. می‌توانید از هر یک از زیرکلاس‌های کلاسِ \minti{Window} که \minti{JFrame} یکی از آن‌ها است به همین صورت استفاده کنید.
+\end{sugg}
+
+{\en Swing}
+شاملِ تعدادی کلاسِ {\en component} است که اجزای مختلفِ یک پنجره را می‌سازند. {\en component}های مختلفی مانندِ دکمه، لیست یا عکس قابلِ استفاده هستند. یک پنجره می‌تواند شامل تعدادی {\en component} باشد. در بخش‌های بعدی با یک {\en component}ِ ساده‌ی {\en Swing} به نامِ \minti{JPanel} آشنا شده و نحوه‌ی اضافه کردنِ آن به پنجره و رسمِ شکل بر روی آن را می‌آموزیم.
+\subsection{\en JPanel}
+یک 
 
 \end{document}
 
