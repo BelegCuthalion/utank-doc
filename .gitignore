@@ -1,3 +1,4 @@
 *.swp
 **/missfont.tex
 out/
+_minted*
