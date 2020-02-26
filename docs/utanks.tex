@@ -1,15 +1,27 @@
 
 \documentclass[a4paper,12pt]{paper}
-\usepackage{amsmath}
-\usepackage{amssymb}
 \usepackage{titlesec}
 \usepackage{fullpage}
 \usepackage{hyperref}
+\usepackage{tcolorbox}
 \usepackage[framemethod=TikZ]{mdframed}
 \usepackage[a4paper,bindingoffset=0.2in,%
-            left=.8in,right=.8in,top=.5in,bottom=1in,%
+            left=.8in,right=.8in,top=.5in,bottom=.5in,%
             footskip=.25in]{geometry}
+\usepackage{tocloft}
+\usepackage{enumitem}
+\setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
+\usepackage{tikz}
+%\setlength{\itemindent}{0em}
+%\setlist[itemize]{leftmargin=*}
+%\setlist[itemize,1]{leftmargin=\dimexpr 26pt-.5in}
+\setlength{\cftsecindent}{0pt}
+\setlength{\cftsubsecindent}{25pt}
+\hypersetup{%
+	pdfborder = {0 0 0}
+}
 \usepackage[outputdir=out]{minted}
+\linespread{1.4}
 \usepackage{xepersian}
 \settextfont{Roya}
 \deflatinfont\dast{Far.Dast Nevis}
@@ -21,10 +33,26 @@
 \setminted[java]{
 				fontfamily=Ubuntu,
 				linenos,
-				bgcolor=codebg
+			    numbersep=1.35em,
+				tabsize=2,
+			    obeytabs
 			}
-\newcommand{\minti}[1]{\lr{\mintinline{java}{#1}}}
-%\newenvironment{sugg}{\begin{mdframed} {\dast پیشنهاد: }}{\end{mdframed}}
+\newtcbox{\roundbox}{on line,
+	arc=1pt,colback=codebg,
+	boxrule=1pt,
+	boxsep=1pt,left=1pt,right=1pt,top=1pt,bottom=1pt}
+\newcommand{\minti}[1]{\roundbox{\lr{\mintinline{java}{#1}}}}
+\renewcommand\theFancyVerbLine{\arabic{FancyVerbLine}}
+\newtcolorbox{roundboxe}[1][]
+{
+%	before upper={\rule[-30pt]{0pt}{10pt}},
+	leftrule=16pt,
+	colframe = blue!85!red!35,
+	colback  = codebg,
+	#1,
+}
+\BeforeBeginEnvironment{minted}{\begin{LTR}\begin{roundboxe}}
+\AfterEndEnvironment{minted}{\end{roundboxe}\end{LTR}}
 
 \newmdenv[%
 outerlinewidth=2,%
@@ -36,31 +64,49 @@ frametitleaboveskip=-\ht\strutbox,
 frametitle= \colorbox{white}{\space{\dast پیشنهاد}\space}%
 ] {sugg}
 
-\titleformat{\section}[runin]{\normalfont\bfseries}{\thesection}{0.7em}{}
-\titlespacing{\section}{.5pc}{2ex plus .1ex minus .2ex}{1pc}
+\newmdenv[%
+outerlinewidth=2,%
+roundcorner=5pt,%
+leftmargin=40,%
+rightmargin=40,%
+outerlinecolor=orange!50,%
+frametitleaboveskip=-\ht\strutbox,
+frametitle= \colorbox{white}{\space{\dast توجّه}\space}%
+] {attn}
+
+
+\titleformat{\section}[block]{\normalfont\bfseries\large}{\thesection}{0.7em}{}
+\titlespacing{\section}{.5pc}{5ex plus .1ex minus .2ex}{1pc}
 \titleformat{\subsection}[runin]{\normalfont\bfseries}{\thesubsection}{0.7em}{}
 \titlespacing{\subsection}{.5pc}{2ex plus .1ex minus .2ex}{1pc}
+\titleformat{\subsubsection}[runin]{\normalfont\bfseries\small}{\thesubsubsection}{0.7em}{}
+\titlespacing{\subsubsection}{.5pc}{2ex plus .1ex minus .2ex}{1pc}
 
 \begin{document}
 \noindent{
-\sc{ویرایش \lr{0.1}} \\
+\sc{ویرایش \lr{1}} \\
 \large{\textbf{پروژه‌ی درسِ برنامه‌سازیِ پیشرفته} \\
  \emph{\en{UTank}}
 }
 }
-\\
+\renewcommand{\contentsname}{}
+\tableofcontents
 
 \section*{مقدمه}
-در این مستند، همراه با معرفیِ پروژه‌ی درس، با ابزارهای گرافیکیِ {\en Java} نیز آشنا می‌شوید. پروژه‌ی درس یک بازیِ گرافیکیِ ساده است که توسطِ دو بازیکن و با صفحه‌کلید بازی می‌شود. هدف از انجامِ پروژه، علاوه بر سنجشِ مهارتِ طراحی و پیاده‌سازیِ نرم‌افزار، تمرینِ کارِ گروهی و استفاده‌  از ابزارهای شیء‌گراییِ {\en Java} در یک مسئله‌ی دنیایِ واقعی است. بنابراین، در معیارِ نهاییِ سنجشِ پروژه، هم کارآییِ برنامه و هم کدِ آن مؤثر خواهند بود.
+در این مستند، همراه با معرفیِ پروژه‌ی درس، با ابزارهای گرافیکیِ {\en Java} نیز آشنا می‌شوید. پروژه‌ی درس یک بازیِ گرافیکیِ ساده است که توسطِ دو بازیکن و با صفحه‌کلید بازی می‌شود. هدف از انجامِ پروژه، علاوه بر سنجشِ مهارتِ طرّاحی و پیاده‌سازیِ نرم‌افزار، تمرینِ کارِ گروهی و استفاده‌  از ابزارهای شیء‌گراییِ {\en Java} در یک مسئله‌ی دنیایِ واقعی است. بنابراین، در معیارِ نهاییِ سنجشِ پروژه، هم کارآییِ برنامه و هم کدِ آن مؤثر خواهند بود.
 
-همچنین پیشنهادهایی برای پیاده‌سازیِ پروژه داده شده است. این پیشنهادها می‌توانند مستقیماً و یا تنها به عنوانِ طرحی کلی استفاده شوند، و همچنین می‌توانند کاملاً نادیده گرفته شوند.
+از پیشنهادهایی که ارائه شده‌اند، از طرح‌های کلی گرفته تا معرفیِ ابزارها و تکنیک‌های مختلف برای پیاده‌سازیِ پروژه، می‌توانید مستقیماً در پروژه استفاده کنید، فقط به یک ایده برسید و یا اصلاً استفاده نکنید، امّا آن‌ها را نادیده نگیرید.
 
-توصیه می‌شود پیش از شروع به کار، این مستند را به دقت و تا انتها خوانده و سؤالات یا ابهام‌های احتمالی را برطرف کنید.
+توصیه می‌شود پیش از شروع به کار، این مستند را به دقّت و تا انتها خوانده و سؤالات یا ابهام‌های احتمالی را برطرف کنید.
 
 \section{\en{Swing}}
-پیش‌تر با چگونگیِ ارتباط با کاربر از طریقِ رابطِ کاربریِ {\en command-line} آشنا شده‌ایم. حالا می‌خواهیم از محیطِ گرافیکی برای این کار استفاده کنیم. رابطِ کاربریِ گرافیکی به ما اجازه می‌دهد تا به راحتی تصویری دلخواه برای نمایش به کاربر بسازیم و همچنین ورودی‌های کاربر مانندِ صفحه‌کلید و موس را کنترل کنیم. در واقع رابطِ گرافیکی برای ما یک «پنجره» با صفحه‌ای خالی فراهم خواهد کرد که می‌توانیم روی آن «رسم» کنیم و بر اساس تعاملِ کاربر با این پنجره کارکردِ برنامه را تعیین کنیم.
+پیش‌تر با چگونگیِ ارتباط با کاربر از طریقِ رابطِ کاربریِ {\en command-line} آشنا شده‌ایم. حالا می‌خواهیم از محیطِ گرافیکی برای این کار استفاده کنیم. رابطِ کاربریِ گرافیکی به ما اجازه می‌دهد تا به راحتی تصویری دلخواه برای نمایش به کاربر بسازیم و همچنین ورودی‌های کاربر مانندِ صفحه‌کلید و موس را کنترل کنیم. در واقع رابطِ گرافیکی برای ما یک «پنجره» با صفحه‌ای خالی فراهم خواهد کرد که می‌توانیم به آن اجزای دیگری به نامِ {\en component} اضافه کنیم، روی آن‌ها «رسم» کنیم و بر اساسِ تعاملِ کاربر با این پنجره و {\en component}هایش کارکردِ برنامه را تعیین کنیم.
 
 ابزارهایی که برای ساختِ یک محیطِ گرافیکی در {\en Java} استفاده خواهیم کرد در پکیجی به نامِ {\en Swing} در {\en JDK} حضور دارند. اولین ابزاری که معرفی خواهد شد، کلاسی به نامِ \minti{JFrame} است که هر {\en object}ِ آن، یک پنجره‌ی رابطِ گرافیکی است.
+
+\begin{attn}
+	این بخش به آشنایی شما با {\en Swing} کمک می‌کند، امّا احتمالاً برای حلِ مسائلِ مختلفی در طولِ کار به مراجعه‌ی مداوم به مستندات، راهنماها و مثال‌های آن، که به راحتی در دسترس هستند، احتیاج پیدا خواهید کرد. (احتمالاً) برخلافِ انتظارتان، تواناییِ خواندن، فهمیدن و استفاده‌ی درست از کدهای دیگران از امتیازاتِ مؤثر در نمره‌ی پایانیِ پروژه است.
+\end{attn}
 
 \subsection{\en JFrame}
 اجرای قطعه‌کدِ زیر یک پنجره‌ی خالی به ابعادِ ۵۰۰ در ۵۰۰ پیکسل را نمایش می‌دهد.
@@ -76,16 +122,659 @@ public class Main {
   }
 }
 \end{minted}
-تابع‌های \minti{.setSize()} و \minti{.setVisible()} دو متد از کلاسِ {\en JFrame} هستند که به ترتیب ابعادِ پنجره را مقدار دهی کرده و آن را نمایش می‌دهند. متدهای دیگری از {\en JFrame} نیز در بخش‌های بعدی معرفی خواهند شد.
-
+تابع‌های \minti{.setSize} و \minti{.setVisible} دو متد از کلاسِ {\en JFrame} هستند که به ترتیب ابعادِ پنجره را مقدار دهی کرده و آن را نمایش می‌دهند. متدهای دیگری از {\en JFrame} نیز برای ترسیم یا افزودنِ یک {\en component} به آن در بخش‌های بعدی معرفی خواهند شد.
 \begin{sugg}
-  در واقع \minti{JFrame} یکی از راه‌های ساختِ پنجره در {\en Swing} است. می‌توانید از هر یک از زیرکلاس‌های کلاسِ \minti{Window} که \minti{JFrame} یکی از آن‌ها است به همین صورت استفاده کنید.
+  در واقع \minti{JFrame} یکی از راه‌های ساختِ پنجره در {\en Swing} است. می‌توانید از هر یک از زیرکلاس‌های کلاسِ \minti{Window} (که \minti{JFrame} یکی از آن‌ها است) به همین صورت استفاده کنید.
 \end{sugg}
+\pagebreak
+\subsection{\en Graphics}\label{sec:graphics}
+ابزارهای مربوط به ترسیم در کلاسی به نامِ \minti{Graphics} در پکیجِ {\en awt} حضور دارند.
+هر شیء از کلاسِ \minti{JFrame} دارای شیءای از کلاسِ \minti{Graphics} است که از طریقِ متدِ {\en getter}ِ آن، \minti{.getGraphics} قابلِ دسترس است. این متد به عنوانِ خروجی، شیءِ \minti{Graphics}ِ مربوط به آن \minti{JFrame} را برمی‌گرداند. از این طریق، برای ترسیم روی یک پنجره می‌توانیم ابتدا شیءِ \minti{Graphics}ِ مربوط به آن را گرفته و سپس با استفاده از متدهای مربوط به ترسیم در کلاسِ \minti{Graphics} این کار را انجام دهیم.
+مثلاً قطعه کدِ زیر یک بیضی، یک متن و یک مستطیل روی \minti{JFrame}ای  که به عنوان پنجره‌مان ساخته بودیم رسم می‌کند.
+\begin{minted}{java}
+import javax.swing.*;
+import java.awt.*;
+
+public class Main {
+	public static void main(String[] args) {
+		JFrame jframe = new JFrame();
+		jframe.setSize(500, 500);
+		jframe.setVisible(true);
+
+		Graphics graphics = jframe.getGraphics();
+		graphics.drawOval(100, 100, 100, 100);
+		graphics.drawString("Salam!", 100, 100);
+		graphics.drawRect(120, 120, 100, 100);
+	}
+}
+\end{minted}
+\begin{attn}
+\begin{itemize}
+\item
+	اگر پس از اجرای قطعه کدِ بالا پنجره‌ی ساخته شده کماکان سفید بود  نگران نباشید.  درواقع برای ماندگاری تصویر، پنجره باید به صورتِ مداوم {\en update} شود. به طورِ مفصل درباره‌ی این کار توضیح داده خواهد شد. امّا فعلاً برای دیدنِ نتیجه می‌توانید خط‌های ۱۱، ۱۲ و ۱۳ را در یک حلقه‌ی بی‌پایان اجرا کنید. در بخش‌های بعد روشِ بهتری برای ترسیم روی پنجره خواهیم دید.
+\item
+جهتِ مثبت برای محورِ {\en X} ‌\textbf{راست} و برای محورِ {\en Y} \textbf{پایین} است. همچنین مبداءِ مختصات در گوشه‌ی بالا و چپِ پنجره قرار دارد.
+\end{itemize}
+\end{attn}
+
+\subsection{\en Component}
 
 {\en Swing}
-شاملِ تعدادی کلاسِ {\en component} است که اجزای مختلفِ یک پنجره را می‌سازند. {\en component}های مختلفی مانندِ دکمه، لیست یا عکس قابلِ استفاده هستند. یک پنجره می‌تواند شامل تعدادی {\en component} باشد. در بخش‌های بعدی با یک {\en component}ِ ساده‌ی {\en Swing} به نامِ \minti{JPanel} آشنا شده و نحوه‌ی اضافه کردنِ آن به پنجره و رسمِ شکل بر روی آن را می‌آموزیم.
-\subsection{\en JPanel}
-یک 
+شاملِ تعدادی زیرکلاس از کلاسِ \minti{Component} است که می‌توانند اجزای مختلفِ یک پنجره را بسازند. {\en component}های مختلفی مانندِ دکمه، لیست یا عکس قابلِ استفاده هستند. یک پنجره می‌تواند شامل تعدادی {\en component} باشد. در این بخش با یک {\en component}ِ ساده‌ی {\en Swing} به نامِ \minti{JPanel} آشنا شده و نحوه‌ی اضافه کردنِ آن به پنجره را می‌آموزیم. می‌توانید این کار را برای {\en component}های دیگری مانندِ \minti{JButton}، \minti{JCheckBox} یا \minti{JSlider} نیز امتحان کنید.
+\begin{attn}
+کلاس‌های \minti{JFrame} و \minti{JPanel} هر دو زیرکلاس‌هایی از \minti{Component} هستند. بنابراین هر چه که درباره‌ی {\en component}های {\en Swing} گفته می‌شود، درباره‌ی هر دوی آن‌ها مصداق دارد. 
+\pagebreak
+تفاوتِ آن‌ها این است که \minti{JFrame}‌ نوعی {\en component} است که یک پنجره را تعریف می‌کند و می‌تواند مستقلاً نمایش داده شود، اما \minti{JPanel}ها به تنهایی نمی‌توانند نمایش داده شوند و باید به یک پنجره اضافه شوند. همچنین بر روی هر دوی آن‌ها، به وسیله‌ی شیءِ\minti{Graphics}شان، می‌توان ترسیم کرد.
+\end{attn}
 
+قطعه کدِ زیر یک \minti{JPanel} به پنجره‌ای که قبلاً ساخته بودیم اضافه می‌کند. در واقع متدِ \minti{.add} به عنوانِ ورودی یک \minti{Component} گرفته و آن را به یک \minti{JFrame} اضافه می‌کند.
+\begin{minted}{java}
+import javax.swing.*;
+
+public class Main {
+  public static void main(String[] args) {
+    JFrame jframe = new JFrame();
+    jframe.setSize(500, 500);
+    jframe.setVisible(true);
+    
+    JPanel jpanel = new JPanel();
+    jframe.add(jpanel);
+  }
+}
+\end{minted}
+به صورتِ پیش‌فرض، \minti{JPanel} خالی است. برای ترسیم روی آن هم دقیقاً مثلِ \minti{JFrame}، می‌توان از شیءِ \minti{Graphics}ِ آن استفاده کرد.
+
+\subsection{کنترلِ ورودی}\label{sec:input}
+در طولِ ترم با {\en callback} به عنوانِ یکی از کاربردهای {\en interface}ها آشنا شده‌ایم. {\en Callback} قطعه‌کدی{\en --}در قالبِ یک تابع{\en --} است که به کدی دیگر سپرده می‌شود تا در زمانِ معیّنی آن را اجرا کند. یکی از مواردِ کاربردِ {\en callback}، کنترل کردنِ تعاملِ کاربر با ورودیِ برنامه است. مثلاً در این‌جا، وظیفه‌ی کنترلِ پنجره، و در نتیجه تعاملِ کاربر با آن، بر عهده‌ی {\en Swing}است و ما مستقیماً نمی‌توانیم بفمیم چه وقت کاربر عملی انجام می‌دهد (مثلاً روی نقطه‌ی خاصی از پنجره کلیک می‌کند). بنابراین قطعه‌کدی که می‌خواهیم در پاسخِ به این تعامل اجرا شود را، با {\en implement} کردنِ یک {\en interface}، به {\en Swing} می‌سپاریم تا در هنگامِ این تعامل، که به آن {\en event} یا رویداد گفته می‌شود، اجرا کند. این {\en interface}های {\en Swing}، که به آن‌ها اصطلاحاً {\en listener} می‌گوییم، طوری طرّاحی شده‌اند که اطلاعاتی درباره‌ی این رویداد، (مثلاً موقعیتِ موس روی پنجره) را از طریقِ ورودیِ تابعِ {\en callback} برای‌مان فراهم می‌کنند.
+
+به عنوانِ مثال، قطعه کدِ زیر موقعیتِ موس روی پنجره را بر روی آن چاپ می‌کند.
+
+\begin{minted}{java}
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseEvent;
+
+public class Main {
+	public static void main(String[] args) {
+		JFrame jFrame = new JFrame();
+		jFrame.setSize(500, 500);
+		jFrame.setVisible(true);
+
+		Graphics graphics = jFrame.getGraphics();
+
+		jFrame.addMouseMotionListener(new MouseMotionAdapter() {
+			public void mouseMoved(MouseEvent e) {
+				graphics.setColor(Color.WHITE);
+				graphics.fillRect(50, 50, 150, 100);
+				graphics.setColor(Color.BLACK);
+				graphics.drawString(e.getX() + ", " + e.getY(), 100, 100);
+			}
+		});
+	}
+}
+\end{minted}
+
+تابعِ \minti{.addMouseMotionListener} یک شیء از نوعِ \minti{MouseMotionListener}، که {\en interface}ی با دو تابعِ {\en abstract} به نام‌های \minti{.mouseMoved} و \minti{.mouseDragged} است را به عنوانِ ورودی می‌گیرد، که ما آن را همین‌جا و به صورتِ کلاسِ {\en anonymous}، {\en implement} کرده‌ایم.
+هر دوی این توابع یک شیءِ \minti{MouseEvent} به عنوانِ ورودی می‌گیرند که اطلاعاتِ این رویدادِ حرکتِ موس را در بر دارد. به عنوانِ مثال در این‌جا ما اطلاعاتِ موقعیتِ موس را از طریقِ متدهای \minti{.getX} و \minti{.getY}ِ \minti{MouseEvent} به دست آورده‌ایم.
+
+
+\begin{attn}
+	\begin{itemize}
+		\item
+		در این‌جا در واقع ما به جای خودِ \minti{MouseMotionListener}، یک زیرکلاس از آن به نامِ \minti{MouseMotionAdapter} را {\en implement} کرده‌ایم. این کلاس در واقع یک کلاس {\en concrete} (غیرِ {\en abstract}) است که متدهای {\en abstract}ِ این {\en interface} را با بدنه‌ی خالی {\en implement} کرده‌است. با این روش می‌توانیم از {\en implement} کردنِ \minti{.mouseDragged}، که به آن نیازی نداریم، خلاص شویم.
+	\end{itemize}
+\end{attn}
+\begin{attn}
+	\begin{itemize}
+		\item
+		کلاسِ \minti{MouseMotionAdapter} به صورتِ {\en anonymous}، یعنی بدونِ تعریفِ صریحِ یک کلاسِ جداگانه {\en implement} شده‌است. یکی از فوایدِ این کار این است که توانسته‌ایم از شیءِ \minti{Graphics}ای که در \minti{Main} در اختیار داشتیم، مستقیماً در این کلاسِ {\en anonymous} استفاده کنیم. ممکن است در جاهایی، مثلاُ وقتی می‌خواهیم {\en instance}های بیشتری از {\en listener}مان بسازیم، بخواهیم آن را به صورتِ یک کلاسِ جداگانه تعریف کنیم، که در این صورت باید از طریقی، مثلاً به وسیله‌ی {\en constructor}ِ آن، اشیاءِ موردِ نیازش (مثلاً در این‌جا \minti{graphics}) را برایش فراهم کنیم.
+		\item
+		درواقع برای این کار، راه‌های دیگری، مانندِ استفاده از \minti{.addMouseListener} که یک شیءِ \minti{MouseListener} می‌گیرد نیز وحود داشت. همچنین {\en component}ها برای رویدادهای دیگر نیز توابعی دارند که هرکدام {\en listener} مربوط به آن رویداد را به عنوانِ ورودی می‌گیرند. به عنوانِ مثال، \minti{.addKeyListener}، \minti{.addFocusListener} یا \minti{.addWindowListener} را ببینید.
+		\item
+		دقّت کنید که دو خطِ ۱۶ و ۱۷ یک مستطیلِ سفید زیرِ جایی که می‌خواهیم موقعیتِ موس را چاپ کنیم رسم می‌کنند. دلیلِ این کار آن است که ما هر بار پیش از ترسیمِ دوباره، صفحه را پاک نمی‌کنیم. بنابراین اگر این دو خط را حذف کینم، موقعیتِ موس هربار روی مقادیرِ قبلی چاپ می‌شود. به زودی روشِ بهتری برای ترسیم روی صفحه می‌بینیم که هر بار پیش از ترسیمِ شکلِ جدید، صفحه را پاک می‌کند.
+	\end{itemize}
+\end{attn}
+
+برای فهمِ بهترِ مکانیزمِ {\en callback} باید به این سناریو فکر کنیم:
+\begin{enumerate}
+\item
+در ابتدای اجرای برنامه شیءِ \minti{MouseMotionListener}ای که ما ساخته‌ایم به \minti{JFrame} داده می‌شود.
+\item
+در زمانی دیگر، \minti{JFrame} تشخیص می‌دهد که رویدادِ حرکتِ موس اتفاق افتاده، اطلاعاتِ مربوط به آن، مانندِ مکانِ موس روی پنجره را در یک شیءِ \minti{MouseEvent} جمع‌آوری کرده و آن رابه متدِ \minti{.mouseMoved} از شیءِ \minti{MouseMotionListener}ای که ما {\en implement} کرده بودیم می‌دهد.
+\end{enumerate}
+دقّت کنید که مرحله‌ی ۱ این سناریو تنها یک بار در ابتدای برنامه اجرا می‌شود و پس از آن، شیءِ \minti{MouseMotionListener}ِ ما در اختیارِ \minti{JFrame} است. درحالی که مرحله‌ی ۲، هربار که موس به اندازه‌ی یک پیکسل روی پنجره جابه‌جا شود اجرا خواهد شد. در بخش‌های بعدی نمونه‌های بیشتری از کنترلِ ورودیِ کاربر خواهیم دید.
+\begin{attn}
+این بار، برخلافِ بخشِ \ref{sec:graphics}، برای ماندگاری اشکالِ رسم شده نیاز نبود توابعِ مربوط به رسمِ شکل را داخلِ یک حلقه‌ی بی‌پایان فراخوانی کنیم، چرا که با هر حرکتِ موس، این توابع اجرا شده و صفحه در واقع بارها {\en update} می‌شود. با این حال اگر پنجره را جابه‌جا کنید یا آن را با پنجره‌ای دیگر بپوشانید، اشکالِ رسم‌شده پاک می‌شوند و صفحه دوباره باید {\en update} شود.
+\end{attn}
+
+\subsection{گسترشِ \en JFrame}\label{sec:jframe-ex}
+برای آن‌که پیش از ترسیمِ شکلِ جدید روی صفحه آن را پاک کنیم، می‌توانیم {\en component}ِ خودمان را {\en extend} کنیم و در آن متدِ \minti{.paint} از کلاسِ \minti{Component} را {\en override}  کرده و کدِ مربوط به ترسیم را در آن‌جا بنویسیم. سپس  با فراخوانیِ تابعِ \minti{.repaint}ِ {\en component}ها هر بار که نیاز است تصویرِ مناسب را روی آن {\en component} ترسیم کنیم. خودِ تابعِ \minti{.repaint}، پس از پاک کردنِ آن {\en component} و چند کارِ دیگر، تابعِ \minti{.paint}ای که ما برایش فراهم کرده‌ایم را فراخوانی می‌کند.
+
+برای نمونه، قطعه‌کدِ زیر همان کارِ بخشِ قبل را انجام می‌دهد، امّا این‌بار چون \minti{JFrame} هر دفعه پاک می‌شود، نیازی به ترسیمِ یک مستطیلِ سفید پشتِ موقعیتِ موس نیست.
+\begin{minted}{java}
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseEvent;
+
+public class Main {
+	public static void main(String[] args) {
+		MyFrame myFrame = new MyFrame();
+		myFrame.setVisible(true);
+
+		myFrame.addMouseMotionListener(new MouseMotionAdapter() {
+			public void mouseMoved(MouseEvent e) {
+				myFrame.updateMouseLocation(e.getX(), e.getY());
+				myFrame.repaint();
+			}
+		});
+	}
+}
+
+class MyFrame extends JFrame {
+	int mouseX, mouseY;
+
+	MyFrame() {
+		this.setSize(500, 500);
+	}
+
+	void updateMouseLocation(int x, int y) {
+		this.mouseX = x;
+		this.mouseY = y;
+	}
+\end{minted}
+\begin{minted}[firstnumber=last]{java}
+	public void paint(Graphics graphics) {
+		super.paint(graphics);
+		graphics.drawString(this.mouseX + ", " + this.mouseY, 100, 100);
+	}
+}
+\end{minted}
+دقّت کنید در این‌جا تابعِ \minti{.paint} متدی از \minti{JFrame} است که در کلاسِ ما \minti{MyFrame}، {\en override} شده است. داده‌ای که \minti{MyFrame} نگهداری می‌کند، یعنی \minti{.mouseX} و \minti{.mouseY}، کنترل کننده‌ی آن چیزی است که باید نمایش داده شود. تابعِ \minti{.updateMouseLocation} هم وضعیتِ این داده را {\en update} می‌کند. حالا داخلِ \minti{.mouseMoved} کافی است این دوکار را انجام دهیم: اوّل وضعیتِ داده‌ای که نمایش داده می‌شود را {\en update} کنیم، و سپس با فراخوانیِ \minti{.repaint} آن را نمایش دهیم.
+
+همچنین از آن‌جایی که داریم \minti{JFrame}ِ خاصِ خودمان را می‌سازیم، می‌توانیم بخشی از کدِ مربوط به آن را به داخلِ کلاس منتقل کنیم. مثلاً در این‌جا تابعِ \minti{.setSize} را در {\en constructor}ِ \minti{MyFrame} فراخوانی می‌کنیم.
+\begin{attn}
+در این‌جا برای ترسیم روی {\en component} از شیءِ \minti{Graphics}ای استفاده کرده‌ایم که خودِ تابعِ \minti{.paint} در اختیارمان گذاشته است. همچنین دقّت کنید که در ابتدای بدنه‌ی \minti{.paint}،  \minti{super.paint} را فراخوانی کرده‌ایم. برای اطلاعِ بیشتر از نحوه‌ی کار با \minti{.paint}، به {\en JavaDoc}  و یا سورسِ آن در کلاسِ \minti{JComponent} مراجعه کنید.
+\end{attn}
+
+یک تفاوتِ مهمِ قطعه‌کدِ بالا با کدهای قبلی این است که این‌جا تا حدودی توانسته‌ایم تفاوتِ دو بخشِ «منطق» و «نمایش» برنامه را برجسته کنیم. خواهیم دید که این تقسیم‌بندی در طرّاحیِ معماریِ پروژه مفید خواهد بود.
+\subsection{\en Timer}\label{sec:timer}
+در بخشِ \ref{sec:graphics} یادگرفتیم روی صفحه اشکالِ ساده‌ای ترسیم کنیم، اما دیدیم برای آن‌که این اشکال روی صفحه ماندگار باشند باید به صورت مداوم ترسیم شوند. حتی اگر از این مشکل صرفِ نظر کنیم، باز هم ممکن است بخواهیم یک قطعه‌کد مداوماً اجرا شود. مثلاً فرض کنید می‌خواهیم یک شکل را (به صورتِ انیمیشن) حرکت دهیم.  برای این کار باید ابتدا آن شکل را در مبداءِ حرکت ترسیم کرده، سپس مقدارِ کمی آن را حرکت دهیم، باز آن را ترسیم کنیم، واین کار را آن قدر ادامه دهیم تا به مقصدِ حرکت برسد.
+استفاده از یک حلقه‌ برای این کار به دلایلِ مختلفی اشتباه است. یک دلیلِ ساده این است که سرعتِ اجرای حلقه وابسته به محیطی است که برنامه در آن اجرا می‌شود. بنابراین سرعتِ اجرای این کد (یا درواقع {\en FPS}ِ انیمیشن) در کنترلِ ما نخواهد بود.
+
+راهِ حلِ این مشکل استفاده از کلاسی به نامِ \minti{Timer} است که به کمکِ آن می‌توانیم یک قطعه‌کد را به صورتِ متناوب با یک بسامدِ معیّن اجرا کنیم. این قطعه کد را با {\en implement} کردنِ {\en interface}ای به نامِ \minti{ActionListener}، در قالب یک تابعِ {\en callback} به {\en constructor}ِ \minti{Timer} می‌دهیم. ورودیِ دیگرِ {\en constructor}ِ \minti{Timer} یک \minti{int} است که به عنوانِ {\en delay}، یعنی تأخیرِ پس از هر بار اجرای کد به میلی‌ثانیه عمل می‌کند. سپس با فراخوانیِ متدِ \minti{.start}ِ \minti{Timer}، کارِ آن آغاز می‌شود.
+
+برای نمونه، قطعه کدِ زیر یک انیمیشن ساده با طولِ فریمِ ۱۰ میلی‌ثانیه را نمایش می‌دهد. دقّت کنید این‌جا نیز {\en interface}ی که قرار است دربرگیرنده‌ی تابعِ {\en callback}ِمان باشد به صورتِ {\en anonymous} {\en implement} شده است. همچنین چون نیازی به استفاده‌ی مجدّد از شیءِ \minti{Timer}ی که ساخته‌ایم نداریم، هیچ {\en reference}ی از آن نگه نمی‌داریم، بلکه همان‌جا که آن را ساختیم، \minti{.start} را فراخوانی می‌کنیم.
+\begin{minted}{java}
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Main {
+	public static void main(String[] args) {
+		MyFrame myFrame = new MyFrame();
+		myFrame.setVisible(true);
+
+		new Timer(
+			10,
+			new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					myFrame.updateState();
+					myFrame.repaint();
+				}
+			}
+		).start();
+	}
+}
+
+class MyFrame extends JFrame {
+	final static int WIDTH = 500, HEIGHT = 500;
+	final static int X_VELOC = 5, Y_VELOC = 5;
+	int shapeX = 250;
+	int shapeY = 0;
+	boolean right = true, down = true;
+
+	MyFrame() {
+		this.setSize(MyFrame.WIDTH, MyFrame.HEIGHT);
+	}
+\end{minted}
+\begin{minted}[firstnumber=last]{java}
+	void updateState() {
+		if (this.shapeX > MyFrame.WIDTH ||  this.shapeX < 0)
+			this.right = !this.right;
+
+		if (this.shapeY > MyFrame.HEIGHT ||  this.shapeY < 0)
+			this.down = !this.down;
+
+		this.shapeX += (this.right? 1 : -1) * MyFrame.X_VELOC;
+		this.shapeY += (this.down? 1 : -1) * MyFrame.Y_VELOC;
+	}
+
+	public void paint(Graphics graphics) {
+		super.paint(graphics);
+		graphics.fillRect(this.shapeX, this.shapeY, 10, 10);
+		Toolkit.getDefaultToolkit().sync();
+	}
+}
+\end{minted}
+این بار داده‌ای که \minti{JFrame}ِ ما نگهداری می‌کند شامل مختصاتِ شکل به علاوه‌ی جهت‌های حرکتِ عمودی و افقیِ آن به صورتِ دو مقدارِ \minti{boolean} است. (دقّت کنید مقادیرِ \minti{static} داده‌ی شیء نیستند و فقط برای نظمِ بیشترتعریف شده‌اند.) حالا دیدِ بهتری از تقسیم‌بندی بین کدِ مربوط به نمایش و کدِ مربوط به داده‌ای که بایدنمایش داده‌شود داریم: کلِ منطقِ ساده‌ای که حرکتِ مربع در صفحه از آن پیروی می‌کند، در تابعِ \minti{.updateState} و نحوه‌ی ترسیمِ آن در تابعِ {\en override} شده‌ی \minti{.paint} نوشته شده است. اگر فرض کنیم \minti{MyFrame} جهانی باشد که ما ساخته‌ایم و داده‌‌ی آن همان وضعیت یا {\en state}ِاش باشد، تابعِ \minti{.updateState} جایی است که قواعدِ فیزیکیِ مربوط به حرکت در این جهان تعریف شده و وضعیت جدید براساسِ وضعیتِ قبلی تعیین می‌شود. از طرفِ دیگر تابعِ \minti{.paint} روکشی ظاهری از وضعیتِ این جهان است که به کاربر نشان داده می‌شود.
+
+به این ترتیب، تابعِ {\en callback}ی که به \minti{Timer} می‌دهیم نیز (درست مانندِ {\en callback}ِ حرکتِ موس در قطعه‌ی کدِ قبلی) دو کارِ اساسی انجام می‌دهد: وضعیت را {\en update} می‌کند، و سپس وضعیتِ کنونی را نمایش می‌دهد.
+
+\begin{sugg}
+شیءِ \minti{ActionEvent}ای که از طریقِ ورودیِ تابعِ \minti{.actionPerformed} به دست‌مان می‌رسد دربردارنده‌ی اطلاعاتِ مفیدی است. از جمله متدِ \minti{.getWhen} که
+یک مقدارِ \minti{long} به عنوانِ زمان برمی‌گرداند، و احتمالاً می‌تواند در تعریفِ قواعدِ حرکتیِ پیچیده‌تر استفاده شود (مثلاً متدِ \minti{.updateState}) می‌تواند تابعی از زمان باشد). و همچنین متدِ \minti{.getModifiers} یک \minti{int}  برمی‌گرداند که از نقشه‌ی باینریِ کلید‌های کنترلیِ صفحه‌کلید که هنگام این اجرای {\en callback} فشرده شده بودند ساخته ‌شده است.
+\end{sugg}
+
+\begin{attn}
+	‌‌در بعضی شرایط که انیمیشن یک‌نواخت اجرا نمی‌شود (وابسته به امکانات سخت‌افزاری یا سیستم‌عامل)، خطِ ۴۷، یعنی
+	\minti{Toolkit.getDefaultToolkit().sync();} 
+	ممکن است کمک‌کننده باشد. کافی است آن را تنها یک بار پس از ترسیمِ فراخوانی کنیم.
+\end{attn}
+
+\begin{sugg}
+ایده‌ی تمایز بین  داده، کنترل و نمایش برگرفته از یک \lr{\en design pattern}ِ به نامِ {\en Model-View-Conreoller} است. این ایده را می‌توان تا آن‌جا پیش برد که حتی این بخش‌ها را در کلاسِ‌های جداگانه بنویسیم.  اگر با {\en MVC} آشنا هستید این پروژه می‌تواند نمونه‌ی خوبی برای پیاده‌سازیِ آن باشد.
+\end{sugg}
+
+\section{پروژه}
+\subsection{شرایط}
+پروژه به سه مرحله تقسیم شده که دو تای اوّل اصلی و سومین مرحله امتیازی است.  مهلتِ انجامِ پروژه سه هفته است و انتظار می‌رود انجامِ هر مرحله حداکثر یک هفته زمان ببرد. بنابراین اگر تا پایانِ هفته‌ی دوم هنوز دو مرحله‌ی نخست را انجام نداده‌باشید، یک هفته مهلتِ اضافه هم برای تکمیلِ مراحلِ قبلی خواهید داشت.
+
+پروژه به صورتِ گروهی انجام می‌شود. از بینِ اعضای هر گروه، یک نفر سرگروه (احتمالاً با مهارتِ بیشتر) انتخاب می‌شود که وظیفه‌اش تصمیم‌گیری درباره‌ی معماریِ پروژه، تقسیمِ وظایفِ اعضای گروه و هماهنگی و توجیه آن‌ها است. هر گروه یک سرپرست  دارد که از بینِ سه مدرّسِ درس انتخاب می‌شود. در پایانِ هر هفته‌ گروه‌ها باید گزارشی از پیشرفتِ پروژه را به سرپرستشان ارائه دهند.
+
+آغازِ هفته‌ی اوّل شنبه ۵ بهمن و پایانِ هفته‌ی سوم جمعه ۲۵ بهمن خواهد بود. تا پایانِ هفته‌ی سوم، باید سورسِ نهاییِ پروژه به دستِ سرپرستِ هر گروه رسیده باشد تا فرایندِ ارائه سریع‌تر انجام شود. ارائه‌ی پروژه از صبحِ شنبه ۲۶ بهمن با حضورِ همه‌ی اعضای گروه‌ها انجام خواهد شد.
+\subsection{تعریف}
+\subsection*{مرحله‌ی اوّل}
+برنامه‌ای که باید بسازید یک بازیِ دو نفره است که از یک صفحه‌ی مستطیلِ محدود و دو \textbf{تانک} در مکانی تصادفی روی صفحه تشکیل شده‌است. هر بازیکن می‌تواند با استفاده از صفحه‌کلید تانکِ خود را \textbf{حرکت} داده، نشانه‌گیری کرده و به تعدادِ معیّنی  \textbf{گلوله} \textbf{شلیک} کند.  برای سادگی می‌توانید \textbf{جهت} نشانه‌گیریِ تانک را همان جهتِ حرکتِ آن بگیرید. در صورتی که گلوله به یک تانک \textbf{برخورد} کند، آن را نابود می‌کند، یک دستِ بازی تمام شده و بازیکنِ مقابل یک \textbf{امتیاز} می‌گیرد. در صورتی که امتیازِ بازیکنی به یک مقدارِ معیّن برسد، آن بازیکن برنده‌ی بازی خواهد بود.
+\subsection*{مرحله‌ی دوم}
+بازی باید یک منو با گزینه‌های شروعِ بازی، تنظیمِ مقررات (تعدادِ گلوله‌ها در هر دستِ بازی، تعدادِ امتیازاتِ لازم برای برد و ...)، تنظیماتِ صفحه کلید و خروج داشته باشد. برای سادگی می‌توانید به هر یک از گزینه‌های منو یک کلیدِ معیّن اختصاص دهید. منو در ابتدای اجرا و پس از پایانِ بازی نمایش داده می‌شود و در هنگامِ بازی هم از طریقِ یک کلید در دسترس است.
+
+روی صفحه‌ی بازی تعدادی \textbf{دیوار} به صورتِ افقی و عمودی هست که مانعِ حرکتِ تانک‌ها و گلوله‌ها می‌شوند. چینشِ دیوار‌ها هنگام شروعِ بازی از بینِ چند {\en map}ِ از پیش تعریف شده قابلِ انتخاب است.تیر‌ها پس از \textbf{برخورد} با دیوار کمانه می‌کنند (بردارِ نرمالُ دیوار باید نیم‌سازِ زاویه‌ای باشد که جهتِ گلوله پیش و پس از برخورد می‌سازد). گلوله‌ها پس از شلیک اگر تا مدتِ معیّنی به تانکی برخورد نکنند از بین می‌روند.
+
+پس از بازه‌های زمانیِ معیّنی، ‌‌تعدادی {\en power-up} به صورتِ تصادفی روی صفحه ظاهر می‌شوند. اگر تانکی یک {\en power-up} بگیرد (به مختصاتِ آن روی صفحه برود)، برای مدتی محدود قدرتِ خاصی پیدا می‌کند که به نحوی، مثلاً با تغییرِ رنگِ تانک، مشخص می‌شود. در غیرِ این صورت {\en power-up} پس از مدتی بین می‌رود. می‌توانید یکی از این سه پیشنهاد را به عنوانِ {\en power-up} پیاده‌سازی کنید.
+\begin{enumerate}
+	\item \lr{\en Frag Bomb}:
+	با دریافتِ این {\en power-up} تانک یک \lr{\en Frag Bomb} دریافت می‌کند و تا آن را شلیک نکند، نمی‌تواند گلوله‌ی عادی شلیک کند. این نوع گلوله از گلوله‌ی عادیِ تانک بزرگ‌تر است. خودِ این گلوله می‌تواند با برخورد به یک تانک آن را نابود کند، امّا با برخورد به دیوار و یا زدنِ دوباره‌ی دکمه‌ی شلیک، \lr{\en Frag Bomb} می‌ترکد و تعدادِ معیّنی ترکش را در جهت‌های مختلف پرتاب می‌کند. ترکش‌ها هم بعد از زمانِ کوتاهی حرکت نابود می‌شوند.
+	\item \lr{\en Mine}:
+	با دریافتِ این {\en power-up} تانک دیگر شلیک نمی‌کند، بلکه با زدنِ دکمه‌ی شلیک، در مختصاتِ تانک یک مین قرار می‌گیرد که ابتدا نامرئی است، امّا با نزدیک شدنِ تانکِ حریف به آن، ظاهر شده و آن را نابود می‌کند. هر مین بعد از مدّتِ معیّنی نابود می‌شود.
+	\item \lr{\en Laser}:
+	پس از گرفتنِ لیزر، تانک تا چند ثانیه می‌تواند از آن استفاده کند. لیزر از همه‌ی دیوارها رد می‌شود و در هر لحظه در جهتِ لوله‌ی تانک است. به علاوه لیزر مسیرِ شلیک را به صورتِ یک خطِ راست از لوله‌ی تانک تا اولین مانع نشان می‌دهد.
+\end{enumerate}
+
+\subsection*{مرحله‌ی سوم}
+اگر دو مرحله‌ی قبل را انجام داده‌اید، می‌توانید با خلاقیتِ خودتان پروژه را از جنبه‌های مختلفی بهبود دهید؛ از مسائلِ کیفی مانندِ گرافیکِ بهتر یا طبیعی‌تر شدنِ حرکات گرفته تا اضافه‌کردنِ قابلیت‌های جدید.
+
+به پیشنهاد‌های زیر هم فکر کنید.
+\begin{itemize}
+	\item
+	یکی نبودنِ جهت‌های حرکت و نشانه‌گیریِ تانک
+	\item
+	حرکتِ شتاب‌دار
+	\item
+	قابلیتِ بارگذاریِ {\en map} از فایل
+	\item
+	ایجادِ {\en map} به صورتِ تصادفی
+	\item
+	ذخیره‌ی تنظیمات در یک فایل و بارگذاری مجددِ آن هنگام شروع برنامه
+	\item
+	استفاده از صدا
+	\item
+{\en power-up}های بیشتر
+\end{itemize}
+
+\section{طرّاحی}
+بخش‌های بعد شاملِ پیشنهاداتی کلّی برای پیاده‌سازیِ پروژه خواهند بود. هدف از ارائه‌ی این پیشنهادات در این‌جا تنها دادنِ ایده‌هایی کلی است. بنابراین لازم نیست حتماً از آن‌ها پیروی کنید. همچنین به همین دلیل کدهایی که این‌جا خواهید دید هیچ‌یک کامل نیستند؛ تنها قسمت‌های اصلی در آن‌ها مشخص شده و جزييات حذف شده‌اند. توصیه می‌شود پیش از خواندنِ این بخش، خودتان (البته روی کاغذ) به معماریِ پروژه فکر کرده و با دیگر اعضای گروه درباره‌ی آن صحبت کنید. سپس پیشنهاداتِ این بخش را خوانده و با طرّاحیِ خودتان مقایسه کنید و آن را بهبود دهید. واضح است که 
+\subsection{ساختارِ داده}
+در طولِ درس، بارها دیدیم که طراحیِ ساختارِ داده‌ی مناسب گامی اساسی در حلِ یک مسئله به کمکِ برنامه‌نویسیِ شیء‌گرا است. در این بخش پیشنهاداتی برای طراحیِ کلاس‌های مختلفِ پروژه خواهید دید.
+\subsubsection{\en Thing}
+در تعریفِ پروژه، دیدیم که باید \textbf{اشیای} مختلفی را روی صفحه رسم کنیم، از جمله تانک، گلوله، دیوار، {\en power-up}، مین، لیزر، ترکش و احتمالاً اشیایی که بعداً در طولِ پیاده‌سازی نیاز به ترسیم روی صفحه پیدا خواهند کرد. همه‌ی این اشیاء، با تمامِ تفاوت‌های‌شان، یک اشتراکِ کلّی دارند: رسم شدن در یک مختصات. بنابراین همه‌ی آن‌ها می‌توانند دارای مختصات و یک متدِ رسم باشند. می‌دانیم که هر شیء برای ترسیم نیاز به یک \minti{Graphics} دارد، پس می‌توانیم آن را در همین متد برایش فراهم کنیم.
+\begin{minted}{java}
+import java.awt.*;
+
+public abstract class Thing {
+	int x;    // px
+	int y;    // px
+
+	Thing(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	abstract void draw(Graphics graphics);
+}
+\end{minted}
+به این ترتیب می‌توانیم در جایی که داریم صفحه را {\en update} می‌کنیم، یک \minti{List<Thing>} نگه داریم و در هر بار {\en update}ِ صفحه، متدِ \minti{.draw}ِ همه‌ی اعضای این لیست را فراخوانی کنیم.
+
+\begin{sugg}
+از آن‌جا که می‌دانیم برخوردِ اشیاء با یک‌دیگر هم باید {\en handle} شود، شاید بد نباشد که ابعادِ اشیاء را هم به طریقی نگه داریم.
+یک راهِ ساده این است که همه‌ی اشیاء، به جز دیوار را به صورتِ دایره تعریف کنیم. در این صورتِ کافی است شعاعِ آن را نگه داریم. برای دیوارها مسئله پیچیده‌تر است.
+همچنین دقّت کنید \minti{.x} و \minti{.y} مختصاتِ یک نقطه از شیء هستند. بهتر است قرارداد کنیم که این مختصات، کدام نقطه را مشخص می‌کند. برای اشیای متقارن می‌تواند مختصاتِ مرکزِ آن، یا برای دیوار می‌تواند مختصات یک نقطه‌ی انتهاییِ آن باشد.
+\end{sugg}
+
+\subsubsection{\en MovingThing}
+بعضی از اشیایی که رسم می‌کنیم، تحتِ شرایطی باید در \textbf{جهتِ} خاصی \textbf{حرکت} بکنند. مثلاً تانک‌ها در صورت فشرده‌شدنِ کلید‌هایی و گلوله‌ها تا زمانی که عمر دارند حرکت می‌کنند. یک راهِ حلِ ساده برای پیاده‌سازیِ حرکت، جابه‌جایی مکانِ شیء به اندازه‌ی یک مقدارِ ثابت به عنوانِ طولِ یک «گام»، و اجرای گام‌ها به صورتِ متوالی است. می‌توانیم کلاسِ قبلی را به کلاسی برای اشیای متحرّک گسترش دهیم که مقادیری برای جهتِ حرکت، طولِ گام (سرعت) و سرعتِ تغییرِ جهت، و همچنین متدهایی برای تغییرِ جهت و جابه‌جایی به میزانِ یک گام دارد. بر خلافِ مثالِ بخشِ \ref{sec:timer}، چون در این‌جا جهت را مستقلّاً نگه می‌دازیم، برای هر دو محور از یک مقدارِ سرعت استفاده می‌کنیم.
+
+دقّت کنید در این جا با این که \minti{MovingThing} زیرکلاسِ \minti{Thing} است، امّا هنوز متدِ \minti{.draw}ِ آن را پیاده‌سازی نکرده است. بنابراین باید \minti{abstract} تعریف شود.
+\begin{minted}{java}
+public abstract class MovingThing extends Thing {
+	double direction;    // rad
+	float velocity; // px/step
+	float angularVelocity; // rad/step
+
+	MovingThing(int x, int y, float v, float aV, double d) {
+		super(x, y);
+		this.velocity = v;
+		this.angularVelocity = a;
+		this.direction = d;
+	}
+
+	private void changeDirection(double amount) {
+		this.direction = (this.direction + amount) % (2 * Math.PI);
+	}
+
+	public void turnLeft() {
+		this.changeDirection(this.angularVelocity);
+	}
+
+	public void turnRight() {
+		this.changeDirection(- this.angularVelocity);
+	}
+
+	void step() {
+		this.x += Math.round(this.velocity * Math.sin(this.direction));
+		this.y += Math.round(this.velocity * Math.cos(this.direction));
+	}
+}
+\end{minted}
+می‌توانیم همان‌جا که صفحه را {\en update} می‌کنیم، بر اساسِ شرایطی مثلِ وضعیتِ کلیدهای فشرده شده روی صفحه‌کلید، متدهای \minti{.step}، \minti{.turnLeft} و \minti{.turnRight}ِ اشیای مربوطه را فراخوانی کنیم.
+
+\begin{sugg}
+	روشِ دیگری برای حرکتِ یک شیء، استفاده از سرعت (طولِ گام) متغیر و تخصیصِ شتاب به شیء است. در این روش \minti{.step} همیشه فراخوانی می‌شود و کلید‌های مربوط به حرکت تنها شتابِ شیء را در جهت‌های مختلف تغییر می‌دهند.
+\end{sugg}
+
+\begin{sugg}
+برخورد همیشه بینِ یک \minti{MovingThing} و یک \minti{Thing} رخ می‌دهد. می‌توانیم متدی به صورتِ \minti{abstract boolean contacts(MovingThing moving)} به \minti{Thing} اضافه کنیم که همیشه پیش از فراخوانیِ \minti{.step} برای هر \minti{MovingThing} توسطِ همه‌ی \minti{Thing}های موجود در صفحه فراخوانی شود. این متد باید به کمکِ \minti{.x} و \minti{.y} و ابعادِ آن دو تشخیص دهد که این دو با هم برخورد خواهند کرد یا نه. واضح است که اگر \minti{MovingThing}ها دایره باشند، پیاده‌سازیِ این تابع بسیار ساده خواهد شد.
+\end{sugg}
+
+\subsubsection{\en Tank}
+چون شیءِ متحرّک را تعریف کرده‌ایم، یک تانک چیزی بیشتر از نحوه‌ی رسمِ آن نخواهد بود.
+\begin{minted}{java}
+import java.awt.*;
+
+public class Tank extends MovingThing {
+	final static int RADIUS = 25;
+	final static int GUN_LENGTH = 30;
+	
+	Tank(int x, int y, double direction) {
+		super(x, y, 2f, 0.06f, direction);
+	}
+
+	public void draw(Graphics graphics) {
+		graphics.drawOval(
+			this.x - Tank.RADIUS,
+			this.y - Tank.RADIUS,
+			Tank.RADIUS * 2,
+			Tank.RADIUS * 2
+		);
+		graphics.drawLine(this.x, this.y, this.getGunX(), this.getGunY());
+	}
+	int getGunX() {
+		return Math.round(this.x +
+									(Tank.GUN_LENGTH * Math.sin(this.direction)));
+	}
+	int getGunY() { /* similarly */ }
+}
+\end{minted}
+در این‌جا ما برای سادگی تانک را به صورتِ یک دایره و یک خط که جهتِ تانک را نشان می‌دهد. دقّت کنید چون متدِ \minti{.draw} در این‌جا {\en override} شده‌است، دیگر نیازی به {\en abstract} بودنِ \minti{Tank} نیست.
+همچنین از \minti{Graphics}ای که در \minti{.draw} در دسترس است برای ترسیم استفاده شده است. بنابراین باید \minti{.draw} را با شیءِ  \minti{Graphics} مناسب فراخوانی کنیم.
+\begin{sugg}
+	یک راهِ جایگزین آن است که برای هر شیء یک {\en component}ِ جدید به صفحه اضافه کنیم. در این صورت امکاناتی برای استفاده از تصویر برای اشیاء در اختیار خواهیم داشت.
+\end{sugg}
+\subsubsection{\en Shot}
+گلوله‌های تانک به جز نحوه‌ی ترسیم، باید اطلاعاتِ مربوط به مدتِ حضورشان را هم مشخص کنند.
+\begin{minted}{java}
+import java.awt.*;
+
+public class Shot extends MovingThing {
+	final static int RADIUS = 10;
+	final static int LIFE = 100;   // step
+
+	int age = Shot.LIFE;
+
+	Shot(int x, int y, double direction) {
+		super(x, y, 3, 0, direction);
+	}
+
+	void draw(Graphics graphics) {
+		graphics.fillOval(this.x - Shot.RADIUS, this.y - Shot.RADIUS,
+			Shot.RADIUS * 2, Shot.RADIUS * 2);
+	}
+
+	void growOld() { this.age--; }
+
+	boolean isDead() { return this.age <= 0; }
+}
+\end{minted}
+\subsubsection{\en Wall}
+برای طراحیِ ساختارِ داده‌ی دیوار، خوب است به این فکر کنیم که مهم‌ترین کارِ آن جلوگیری از حرکتِ اشیاءِ دیگر است. یک روشِ ساده استفاده از مختصاتِ \minti{Thing} به عنوانِ نقطه‌ی شروعِ دیوار و نگهداریِ اندازه و جهتِ آن است. چون دیوارها یا عمودی و یا افقی هستند، یکی از مختصاتِ دو نقطه‌ی ابتدا و انتهای دیوار برابر خواهد بود که آن را \minti{.j} و دیگری را برای نقطه‌ی آغاز \minti{.i1} و برای نقطه‌ی پایان \minti{.i2} می‌نامیم. با این روش، ساختِ {\en map}های پیچیده به صورتِ هزارتو بسیار ساده خواهد بود. بنابراین کافی است تنها سه مقدار را نگه داریم: در صورتِ افقی بودن، دو عرض و یک طول، و در صورتِ عمودی بودن، یک عرض و دو طول، به صورتِ شکل‌های زیر:
+\begin{center}
+	\input{wall-v}\input{wall-h}
+\end{center}
+\begin{minted}{java}
+public class Wall extends Thing {
+	final static int WIDTH = 1;	// px
+
+	int i1, i2, j;
+	boolean isVertical;
+
+	public Wall(int x, int y, int length, boolean isVertical) {
+		super(x, y);
+		this.isVertical = isVertical;
+		if (isVertical) {
+			this.i1 = y;
+			this.i2 = y + length;
+			this.j = x;
+		} else {
+			this.i1 = x;
+			this.i2 = x + length;
+			this.j = y;
+		}
+	}
+	
+	public void draw(Graphics graphics) {
+		int width = (this.isVertical)? Wall.WIDTH : this.i2 - this.i1;
+		int height = (this.isVertical)? this.i2 - this.i1 : Wall.WIDTH;
+		graphics.fillRect(this.getX(), this.getY(), width, height);
+	}
+\end{minted}
+همچنین اگر \minti{MovingThing}ها را دایره فرض کرده‌باشیم (و در نتیجه برای آن‌ها شعاع، و متدِ {\en getter}ِ آن، \minti{.getRadius} تعریف شده‌باشد)، و همچنین برای \minti{Thing}، متدِ \minti{.contacts} را چنان که گفته شد تعریف کرده‌باشیم، می‌توانیم آن را در \minti{Wall} به صورتِ زیر پیاده‌سازی کنیم.
+\begin{minted}[firstnumber=last]{java}
+	boolean contacts(MovingThing moving) {
+		int mI = (this.isVertical)? moving.getY() : moving.getX();
+		int mJ = (this.isVertical)? moving.getX() : moving.getY();
+
+		int start = (this.i1 <= this.i2)? this.i1 : this.i2;
+		int end = (this.i1 <= this.i2)? this.i2 : this.i1;
+		
+		int contactJ = mJ +
+								((this.j <= mJ)? -1 : 1) *
+								moving.getRadius();
+		return (
+			start <= mI + moving.getRadius() &&
+			mI - moving.getRadius() <= end &&
+			this.j - Wall.WIDTH <= contactJ &&
+			contactJ <= this.j + Wall.WIDTH
+		);
+	}
+}
+\end{minted}
+به کلاسِ \minti{Shot} هم می‌توانیم متدی برای تغییر جهتِ مناسب پس از برخورد به دیوار اضافه کنیم.
+\begin{minted}[linenos=false]{java}
+void bounceAgainst(Wall wall) {
+	this.direction = (Wall.isVertical()? 0 : Math.PI) - this.direction;
+}
+\end{minted}
+
+\subsubsection{\en Player}
+اطلاعاتِ مربوط به بازیکن را می‌توانیم در یک کلاس جمع کنیم.
+\begin{minted}{java}
+public class Player {
+	Tank tank;
+	int points = 0;
+
+	void newRound(boolean hasWon, int startX, int startY) {
+		if (hasWon)
+			this.points++;
+		else
+			this.tank = new Tank(startX, startY, 0);
+	}
+}
+\end{minted}
+\subsubsection{\en GameActionListener}
+در بخشِ \ref{sec:input} یادگرفتیم چگونه با {\en implement} کردنِ یک {\en listener} به {\en event}هایی که برای \minti{JFrame} اتفاق می‌افتد گوش‌دهیم. اکنون می‌خواهیم برای {\en event}های صفحه کلید یک {\en listener} بسازیم. اما می‌خواهیم وضعیتِ کلیدهای فشرده شده را هم نگه داریم. به این ترتیب، هنگام {\en update} کردنِ صفحه کافی است از این کلاس وضعیتِ کلیدها را بپرسیم و بر اساسِ آن حرکت‌های اشیاء روی صفحه را انجام دهیم.
+\begin{minted}{java}
+import java.awt.event.*;
+
+public class GameActionListener extends KeyAdapter {
+	boolean p1Move, p1Left, p1Right, p1Fire,
+					p2Move, p2Left, p2Right, p2Fire,
+					escape;
+
+	public void keyPressed(KeyEvent e) {
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_LEFT:
+				this.p1Left = true;
+				break;
+			case KeyEvent.VK_RIGHT:
+				this.p1Right = true;
+				break;
+			// ... handle other keys
+		}
+		e.consume();
+	}
+
+	public void keyReleased(KeyEvent e) {
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_LEFT:
+				this.p1Left = false;
+				break;
+			case KeyEvent.VK_RIGHT:
+				this.p1Right = false;
+				break;
+			// ... handle other keys
+		}
+		e.consume();
+	}
+}
+\end{minted}
+متدهای \minti{.keyPressed} و \minti{.keyReleased} هنگام فشرده‌شدن و رهاشدنِ کلیدی از صفحه کلید فراخوانی می‌شوند. شیءِ \minti{KeyEvent}ای که در این متدها در اختیارمان قرار دارد از طریقِ متدِ \minti{.getKeyCode} جزییاتِ این {\en event}، از جمله کلیدِ موردِ نظر را به صورتِ یک \minti{int} به ما می‌دهد. دقّت کنید مقادیری که در \minti{case}ها با خروجیِ این متد مقایسه شده‌اند هم \minti{int}های \minti{static}ای هستند که کلاسِ \minti{KeyEvent} از آن‌ها به عنوانِ کدِ کلید‌های صفحه‌کلید استفاده می‌کند. برای اطّلاع از دلیلِ فراخوانیِ متدِ \minti{.consume}ِ \minti{KeyEvent} در انتها به سورسِ \minti{KeyEvent} مراجعه کنید.
+
+\begin{sugg}
+	می‌توانیم فیلد‌هایی از نوعِ \minti{int} به \minti{GameActionListener} اضافه کنیم که مقادیرِ دلخواهِ کاربر را برای کلیدهای مربوط به هر عمل در بازی را نگه می‌دارند و از این فیلدها در مقایسه با خروجیِ \minti{.getKeyCode} استفاده کنیم.
+\end{sugg}
+\subsubsection{\en Game}
+بهتر است تمامِ کارهای مربوط به کنترلِ قواعدِ حرکت، قواعدِ بازی و نگهداری و {\en update} کردنِ وضعیتِ بازی را به یک کلاسِ جداگانه که آن را \minti{Game} می‌نامیم بسپاریم. این‌جا جایی است که همه‌ی اشیاءِ بازی نگهداری می‌شوند و در هر لحظه صفحه بر اساسِ وضعیتِ بازی ترسیم می‌شود. از طرفِ دیگر در بخشِ \ref{sec:jframe-ex} دیده‌بودیم که می‌توانیم تمامِ اعمالِ مربوط به ترسیم را با {\en override} کردنِ متدِ \minti{.paint}ِ \minti{JFrame}انجام دهیم. چون برای ترسیم می‌خواهیم به همه‌ی این اشیاء دسترسی داشته‌باشیم، می‌توانیم اصلاً \minti{Game} را همان زیرکلاسی که می‌خواهیم از \minti{JFrame} بسازیم تعریف کنیم.
+\begin{minted}{java}
+public class Game extends JFrame {
+	final static int WIDTH = 500, HEIGHT = 500;
+
+	List<Things> everyThing = new ArrayList<>();
+	Player player1 = new Player();
+	Player player2 = new Player();
+	List<Shot> shotsInTheAir = new ArrayList<>();
+
+	Game() {
+		this.setSize(Game.WIDTH, Game.HEIGHT);
+
+		Wall leftEdge = new Wall(20, 20, Game.HEIGHT, true);
+		this.everyThing.add(leftEdge);
+		this.walls.add(leftEdge);
+		Wall topEdge = new Wall(20, 20, Game.WIDTH, false);
+		this.everyThing.add(topEdge);
+		this.walls.add(topEdge);
+		// ... add other walls
+		this.player1.newRound(false, Math.random() * Game.WIDTH,
+													Math.random() * Game.HEIGHT);
+		// ... same for player2
+\end{minted}
+\begin{minted}[firstnumber=last]{java}
+		this.everyThing.add(player1.getTank());
+		this.everyThing.add(player2.getTank());
+	}
+
+	void updateState() {
+		Tank p1Tank = this.player1.getTank();
+		Tank p2Tank = this.player2.getTank();
+		for (Shot shot : this.shotsInTheAir) {
+			for (Wall wall : this.walls) {
+				if (wall.contacts(shot))
+					shot.bounceAgainst(wall);
+				else
+					shot.step();
+			}
+			if (p1Tank.contacts(shot)) {
+				this.everyThing.remove(p1Tank);
+				// ... code to handle new round
+			}
+			// ... same for player2
+		}
+		this.shotsInTheAir.forEach(Shot::growOld);
+		this.shotsInTheAir.removeIf(Shot::isDead);
+		
+		GameActionListener listener = (GameActionListener) 
+				this.getKeyListeners()[0];
+		if (listener.p1Move() &&
+				this.walls.stream().noneMatch(wall -> wall.contacts(p1Tank))) {
+			p1Tank.step();
+		}
+		if (listener.p1Left())
+			p1Tank().turnLeft();
+		if (listener.p1Fire())
+			this.shotsInTheAir.add(new Shot(
+				p1Tank.getGunX(), p2Tank.getGunY(), p1Tank.getDirection()
+			));
+		// ... handle other game actions
+	}
+\end{minted}
+\begin{minted}[firstnumber=last]{java}
+	public void paint(Graphics graphics) {
+		super.paint(graphics);
+		this.everyThing.forEach(thing -> thing.draw(graphics));
+		Toolkit.getDefaultToolkit().sync();
+	}
+}
+\end{minted}
+
+متد‌های \minti{.updateState} و \minti{.paint} دقیقاً همان کاری را می‌کنند که درباره‌ی آن صحبت کردیم: {\en update} کردن وضعیت و ترسیمِ صفحه. حالا کافی است در \minti{Main}، \minti{Timer}مان و چرخه‌ی اصلیِ برنامه را راه بیاندازیم.
+\begin{minted}{java}
+public class Main {
+	public static void main(String[] args) {
+		Game game = new Game();
+		game.addKeyListener(new GameActionListener());
+		game.setVisible(true);
+		
+		new Timer(
+			10,
+			e -> {
+				gamePanel.updateState();
+				gamePanel.repaint();
+			}
+		).start();		
+	}
+}
+\end{minted}
+با این معماری، افزودنِ مواردِ دیگر مانندِ منو و {\en power-up}ها هم کارِ سختی نخواهد بود.
+
+\begin{attn}
+	\begin{itemize}
+		\item
+		بارِ دیگر تأکید می‌شود این‌ها تنها پیشنهاداتی برای گرفتن ایده هستند و قطعاً با کمی فکرکردن می‌توان راهِ‌حل‌های بسیار بهتری پیدا کرد. بنابراین پیش از شروع به کدنویسی معماریِ برنامه‌تان و نحوه‌ی پیاده‌سازیِ منطقِ آن را، خصوصاً درباره‌ی هندسه و فیزیکِ بازی، \textbf{بر روی کاغد} طراحی کنید. قطعاً وقتی که برای کدنویسی صرف خواهید کرد بسیار کم‌تر از وقتی است که قرار است روی طراحی بگذارید.
+		\item
+			مهم‌ترین برتریِ برنامه‌نویسیِ شیءگرا وجودِ امکانِ تغییراتِ گسترده در پیاده‌سازی است. بنابراین در هر مرحله از پیشرفتِ پیاده‌سازی که احساس کردید نیاز به تغییر در معماری و روشِ پیاده‌سازی وجود دارد، نگران نباشید. دوباره به مسئله فکر کنید و از بازنویسیِ هرچه که تا آن لحظه نوشته‌اید نترسید.
+	\end{itemize}
+\end{attn}
+موفق باشید.
 \end{document}
 
